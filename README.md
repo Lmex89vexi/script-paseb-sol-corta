@@ -18,7 +18,7 @@ pip install -r requirements.pip
 source .venv_scripts/bin/activate
 ```
 
-## Reemplazar Varible en main.py:
+## Reemplazar Variable en main.py:
 ```bash
 APISOL_ORQUESTADOR = "http://172.20.80.1:61997/"
 ```
