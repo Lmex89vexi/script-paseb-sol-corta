@@ -1,41 +1,33 @@
-import requests
+from constantes import DATOS_PARA_PROCESAR
 from loguru import logger
-import os
-from typing import Dict, List
+from typing import  List
 
 from api_server_request import (
-    api_server_post_request,
+    api_server_put_request,
 )
 
 # ===================== servicios APISOL-ORQUESTADOR =====================
-APISOL_ORQUESTADOR = os.getenv(
-    "APISOL_ORQUESTADOR", "http://apisol-orquestador.intravexi.mx"
-)
+APISOL_ORQUESTADOR = "http://172.20.80.1:61997/"
+PASEB_SOL_CORTA = "v1/solicitud/paseb-sol-corta/manual/{}/"
+# ===================== servicios APISOL-ORQUESTADOR =====================
 
 
 
 
-
-
-# ===================== servicios APISOL-INTERNO =====================
-
-
-
-
-def main(datos: List[Dict[str, object]]) -> None:
-    logger.info(f"---fechas para iniciar  {locals()} ")
+def main(datos: List[int]) -> None:
+    logger.info(f"---id_solicitudes a procesar {locals()} ")
 
     if not datos:
         return
 
-    logger.info(f"---Total de solicitudes a GENERA RANDOM DIGIT {len(datos)} --- ")
     contador_procesado = 0
     for id_solicitud in datos:
-        logger.info(f"---solicitud a  GENERA RANDOM DIGIT {id_solicitud} --- ")
+        logger.info(f"---solicitud a  procesar {id_solicitud} --- ")
 
         try:
-            response = api_server_post_request(
-                url=APISOL_INTERNO + POST_GENERAR_RANDOM_DIGITTS.format(id_solicitud),
+            logger.debug(f" --- LLAMAR AL SERVICIO {APISOL_ORQUESTADOR}/{PASEB_SOL_CORTA.format(id_solicitud)} ")
+            response = api_server_put_request(
+                url=APISOL_ORQUESTADOR + PASEB_SOL_CORTA.format(id_solicitud),
                 data={},
             )
 
@@ -44,10 +36,10 @@ def main(datos: List[Dict[str, object]]) -> None:
 
         except Exception as exc:
             logger.exception(
-                f" ---Error en LLAMAR AL SERVICIO {POST_GENERAR_RANDOM_DIGITTS} {id_solicitud} Error:{exc}"
+                f" ---Error en LLAMAR AL SERVICIO {PASEB_SOL_CORTA} {id_solicitud} Error:{exc}"
             )
-    logger.info(
-        f"---Total de solicitudes a GENERA RANDOM DIGIT {len(datos)} ---  procesadas {contador_procesado}"
+    logger.success(
+        f"---Total de solicitudes a procesador con exito {contador_procesado} ---  Total {len(datos)}"
     )
 
 

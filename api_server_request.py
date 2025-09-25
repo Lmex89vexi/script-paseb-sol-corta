@@ -88,9 +88,10 @@ def api_server_put_request(url: str, data:Dict[str, object]):
     """
 
     head = {"Content-Type": APPLICATION_JSON}
+    logger.debug(f"-----url {url} --- data {data}")
     request = requests.Request("PUT", url, headers=head, json=data)
     prepped = HTTP_SESSION.prepare_request(request)
-    response = HTTP_SESSION.send(prepped)
+    response = HTTP_SESSION.send(prepped, verify=False)
     logger.debug(f"-----url {url} --- data {data} Response :{response}")
     if response.status_code in [200, 201]:
         return response.json()
